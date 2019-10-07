@@ -46,7 +46,7 @@ public class VoiceConference {
         multiClient = new MulticastClient(hostIP);
         recordPlayback = new RecordPlayback(multiClient);
 
-        multiServer = new MulticastServer(recordPlayback);
+        multiServer = new MulticastServer(recordPlayback,hostIP);
         multiServer.start();
 
         Thread.sleep(1000);
