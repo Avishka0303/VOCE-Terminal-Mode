@@ -2,12 +2,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 public class MulticastClient {
     
-    private MulticastSocket multicastSocket;
+    private DatagramSocket multicastSocket;
     private InetAddress multicastAddress;
     private RecordPlayback audioService;
     private byte[] buffer;
@@ -18,7 +19,7 @@ public class MulticastClient {
     public MulticastClient(InetAddress hostIP){
         try {           
             //initiaize the multicast Socket.
-            multicastSocket = new MulticastSocket(ProgramData.MUL_PORT_NUMBER);
+            multicastSocket = new DatagramSocket(ProgramData.MUL_PORT_NUMBER);
             //initialize the multicast
             multicastAddress = hostIP;
         }catch (IOException ex1){
@@ -43,15 +44,6 @@ public class MulticastClient {
             
             System.out.println("Error in multicast packet sending.");
             
-        }
-    }
-    
-    public void endTransmission(){
-        try {
-            multicastSocket.leaveGroup(multicastAddress);
-            multicastSocket.close();
-        } catch (IOException ex) {
-            System.out.println("Error when leaving the group.");
         }
     }
 }

@@ -45,7 +45,8 @@ public class MulticastServer extends Thread{
                 
                 //--------------------- Recieve the data packet-------------------------------
                 multicastSocket.receive(datagramPacket);
-                
+                System.out.println(datagramPacket.getAddress());
+
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInputStream inputObject = new ObjectInputStream(inputStream);
@@ -58,6 +59,7 @@ public class MulticastServer extends Thread{
                 
             }catch(IOException ex){
                 System.out.println("Error in multicast recieve.");
+                ex.printStackTrace();
             }catch(ClassNotFoundException ex1){
                 System.out.println("Error in read object");
             }
