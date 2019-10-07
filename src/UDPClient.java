@@ -37,7 +37,7 @@ public class UDPClient {
             outputObject.flush();
             
             byte[] objectData = byteOutput.toByteArray();
-            DatagramPacket dataPacket = new DatagramPacket(objectData , objectData.length , hostAddress  ,ProgramData.PORT_NUMBER);
+            DatagramPacket dataPacket = new DatagramPacket(objectData , objectData.length , hostAddress  ,port);
             
             try{
                 udpSocket.send(dataPacket);
