@@ -3,6 +3,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 public class MulticastServer extends Thread{
@@ -13,7 +14,7 @@ public class MulticastServer extends Thread{
     
     private byte[] buffer;
     
-    public MulticastServer(RecordPlayback playback){
+    public MulticastServer(RecordPlayback playback, InetAddress groupIP){
         
         try {
             
@@ -22,8 +23,10 @@ public class MulticastServer extends Thread{
             buffer = new byte[ProgramData.PACKET_SIZE *4 ];
             //initiaize the multicast Socket.
             multicastSocket = new MulticastSocket(ProgramData.MUL_PORT_NUMBER);
-            //create the datagram packet
+            //create the datagram packet.
             datagramPacket = new DatagramPacket(buffer, ProgramData.PACKET_SIZE *4 );
+            //join with group.
+            multicastSocket.joinGroup(groupIP);
             
         }catch (IOException ex1){
             System.out.println("IO Exception has been generate");
@@ -42,8 +45,6 @@ public class MulticastServer extends Thread{
                 
                 //--------------------- Recieve the data packet-------------------------------
                 multicastSocket.receive(datagramPacket);
-
-                datagramPacket.setData(buffer);
                 
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);

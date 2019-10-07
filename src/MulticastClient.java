@@ -21,8 +21,6 @@ public class MulticastClient {
             multicastSocket = new MulticastSocket(ProgramData.MUL_PORT_NUMBER);
             //initialize the multicast
             multicastAddress = hostIP;
-            //join the group
-            multicastSocket.joinGroup(multicastAddress);
         }catch (IOException ex1){
             System.out.println("IO Exception has been generate");
         }
@@ -31,7 +29,7 @@ public class MulticastClient {
     public void sendDataPacket(byte[] data){ 
         
         try {
-            
+
             DataPacket packet = new DataPacket( (packetCount++% 8) ,data );
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
