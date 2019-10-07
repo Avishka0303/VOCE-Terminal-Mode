@@ -19,7 +19,7 @@ public class MulticastClient {
     public MulticastClient(InetAddress hostIP){
         try {           
             //initiaize the multicast Socket.
-            multicastSocket = new DatagramSocket(ProgramData.MUL_PORT_NUMBER);
+            multicastSocket = new DatagramSocket();
             //initialize the multicast
             multicastAddress = hostIP;
         }catch (IOException ex1){

@@ -43,8 +43,8 @@ public class VoiceConference {
 
     public static void startMulticastServer(InetAddress hostIP) throws InterruptedException{
 
-        multiClient = new MulticastClient(hostIP);
-        recordPlayback = new RecordPlayback(multiClient);
+        client = new UDPClient(hostIP);
+        recordPlayback = new RecordPlayback(client);
 
         multiServer = new MulticastServer(recordPlayback,hostIP);
         multiServer.start();
@@ -52,7 +52,6 @@ public class VoiceConference {
         Thread.sleep(1000);
 
         recordPlayback.captureVoice();
-
 
     }
 
