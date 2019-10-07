@@ -1,3 +1,4 @@
+import javax.xml.transform.sax.SAXSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -41,6 +42,7 @@ public class MulticastServer extends Thread{
                 
                 //--------------------- Recieve the data packet-------------------------------
                 multicastSocket.receive(datagramPacket);
+
                 datagramPacket.setData(buffer);
                 
                 //--------------------- Deseriaize the object --------------------------------
