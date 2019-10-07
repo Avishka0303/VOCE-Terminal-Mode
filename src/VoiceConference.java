@@ -43,7 +43,7 @@ public class VoiceConference {
 
     public static void startMulticastServer(InetAddress hostIP) throws InterruptedException{
 
-        client = new UDPClient(hostIP);
+        client = new UDPClient(hostIP,ProgramData.MUL_PORT_NUMBER);
         recordPlayback = new RecordPlayback(client);
 
         multiServer = new MulticastServer(recordPlayback,hostIP);
@@ -57,7 +57,7 @@ public class VoiceConference {
 
     public static void startUDPserverAndClient(InetAddress hostIP) throws InterruptedException{
 
-        client = new UDPClient(hostIP);
+        client = new UDPClient(hostIP,ProgramData.PORT_NUMBER);
         recordPlayback = new RecordPlayback(client);
 
         server = new UDPServer(recordPlayback);

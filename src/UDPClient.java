@@ -12,9 +12,11 @@ public class UDPClient {
     private InetAddress hostAddress;
     private DatagramSocket udpSocket;
     private int packetCount;
+    private int port;
     
-    public UDPClient(InetAddress peerIPAddress){
+    public UDPClient(InetAddress peerIPAddress,int port){
         try {
+            this.port = port ;
             this.hostAddress = peerIPAddress;
             this.udpSocket   = new DatagramSocket();
         }catch(SocketException ex1){
