@@ -31,7 +31,9 @@ public class MulticastServer extends Thread{
     }
 
     @Override
-    public void run(){ 
+    public void run(){
+
+        System.out.println("Multicast server is online. ");
 
         while(true){
             
@@ -39,6 +41,7 @@ public class MulticastServer extends Thread{
                 
                 //--------------------- Recieve the data packet-------------------------------
                 multicastSocket.receive(datagramPacket);
+                datagramPacket.setData(buffer);
                 
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
