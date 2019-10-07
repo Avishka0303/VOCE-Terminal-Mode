@@ -21,13 +21,21 @@ public class RecordPlayback {
     SourceDataLine sourceDataLine;
 
     UDPClient u_client;
+    MulticastClient m_client;
+
     boolean isMulticast = false;
 
     byte tempBuffer[] = new byte[ProgramData.PACKET_SIZE];
     
     public RecordPlayback(Object client){
         readyAudioSystem();
-        u_client = (UDPClient)client;
+        if(client instanceof UDPClient)
+            u_client = (UDPClient)client;
+        else{
+            m_client = (MulticastClient)client;
+            isMulticast=true;
+        }
+
     }
 
     private AudioFormat getAudioFormat() {
@@ -91,7 +99,10 @@ public class RecordPlayback {
                     while (!stopCapture) {
                         readCount = targetDataLine.read(tempBuffer, 0, tempBuffer.length);  //capture sound into tempBuffer
                         if (readCount > 0) {
-                            u_client.UDPSendPacket(tempBuffer);
+                            if(isMulticast)
+                                m_client.sendDataPacket(tempBuffer);
+                            else
+                                u_client.UDPSendPacket(tempBuffer);
                         }
                     }
                     byteArrayOutputStream.close();
