@@ -4,28 +4,33 @@ import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
+/*
+* This class is for receiving the data
+*
+* */
+
 public class UDPServer extends Thread{
     
     private DatagramSocket datagramSocket;
     private DatagramPacket datagramPacket;
     private RecordPlayback audioService;
+    private User user;
     
     private byte[] buffer;
     public static boolean isOnline = true;
-    private byte reArrangeBuffer[][]; 
     
     public UDPServer(RecordPlayback playback){
         
         try {
             
             this.audioService = playback;
+
+            //initialize the user
+            user = new User();
             
-            //buffer for read input data
+            //buffer for read entire data packet
             buffer = new byte[ProgramData.PACKET_SIZE * 4];
-            
-            //buffer for rearranging the packets
-            this.reArrangeBuffer = new byte[ProgramData.MEM_SIZE][ProgramData.PACKET_SIZE];
-            
+
             //construct the socket.
             datagramSocket = new DatagramSocket(ProgramData.PORT_NUMBER);
            
@@ -38,8 +43,7 @@ public class UDPServer extends Thread{
         }
         
     }
-    
-    
+
     @Override
     public void run() {
             
@@ -47,38 +51,38 @@ public class UDPServer extends Thread{
         
         long startTime = System.currentTimeMillis();
         long endTime = 0 ;
-        long packetCount=0;
-        int packetNo=0;
-        int packetLossCount=0;
         
         while(isOnline){
 
             try{
 
                 //-------------------- Recieve byte array from datagram socket --------------
-                datagramSocket.receive(datagramPacket);    
-                packetCount++;
+                datagramSocket.receive(datagramPacket);
                 
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInputStream objectStream = new ObjectInputStream(inputStream);
                 DataPacket packet = (DataPacket)objectStream.readObject();
-                
-                System.out.println( "Packet has to arrived : " +( packetNo+1)+" arrived packet : "+packet.packetIndex);
-                packetNo = packet.packetIndex;
-                
-//                if(reArrangeBuffer[packetNo%ProgramData.MEM_SIZE]==null)
-//                    reArrangeBuffer[packetNo%ProgramData.MEM_SIZE] = packet.voice_buffer;    
+
+
+                int pIndex = packet.packetIndex;
+
+                if( user.lastIndex!=pIndex )
+                    user.disArrangments++;
+
+                user.lastIndex = pIndex;
+                user.arrivedPackets++;
 
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(packet.voice_buffer);
-                
+
                 endTime = System.currentTimeMillis();
-                
                 if( (endTime-startTime) >= 60000 ){
                     startTime = System.currentTimeMillis();
-                    System.out.println("-------------------------------------received packet count : "+packetCount );
-                    packetCount = 0 ;
+                    System.out.println( "UserData : "+user.userIP+
+                                        "\narrived : "+user.arrivedPackets+
+                                        "\ndisordered : "+user.disArrangments+"\n");
+                    user.resetData();
                 }
                 
             }catch(IOException e){

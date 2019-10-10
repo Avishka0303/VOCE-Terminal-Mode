@@ -11,6 +11,8 @@ public class User {
         resetData();
     }
 
+    public User(){ }
+
     public void resetData(){
         for(int i=0;i<ProgramData.MEM_SIZE;i++) {
             voice_buffer[i] = null;
@@ -20,4 +22,7 @@ public class User {
         arrivedPackets = 0;
     }
 
+    public void setUserIP(String userIP) {
+        this.userIP = userIP;
+    }
 }

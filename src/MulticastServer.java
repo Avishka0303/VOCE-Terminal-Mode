@@ -40,7 +40,7 @@ public class MulticastServer extends Thread{
     @Override
     public void run(){
 
-        System.out.println("Multicast server is online. ");
+        System.out.println("Multicast server is online.");
 
         while(isOnline){
             
@@ -58,9 +58,9 @@ public class MulticastServer extends Thread{
                 InetAddress senderIp = datagramPacket.getAddress();
                 int userHash = senderIp.hashCode();
 
-                //---------------------- Packer rearranging and user controlling ----------------
+                //---------------------- Packet rearranging and user controlling ----------------
 
-                User user = null;
+                User user;
                 if(usersMap.containsKey(userHash)){
                     user = usersMap.get(userHash);
                 }else{
@@ -82,8 +82,7 @@ public class MulticastServer extends Thread{
                 if( pIndex == 15 || (user.arrivedPackets-ProgramData.MEM_SIZE)>3 ){
                     System.out.println( "UserData : "+user.userIP+
                                         "\narrived : "+user.arrivedPackets+
-                                        "\nloss : "+(ProgramData.MEM_SIZE-user.arrivedPackets)+
-                                        "\ndisarrangement : "+user.disArrangments+"\n");
+                                        "\ndisordered : "+user.disArrangments+"\n");
                     user.resetData();
                 }
 

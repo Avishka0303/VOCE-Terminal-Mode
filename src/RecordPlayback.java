@@ -35,8 +35,9 @@ public class RecordPlayback {
             m_client = (MulticastClient)client;
             isMulticast=true;
         }
-
     }
+
+    public RecordPlayback(){}
 
     private AudioFormat getAudioFormat() {
         float sampleRate = 16000.0F;
@@ -88,29 +89,27 @@ public class RecordPlayback {
 
     public void captureVoice() {
 
-        Thread recordingThread = new Thread(new Runnable() {
+        Thread recordingThread = new Thread(() -> {
 
-            @Override
-            public void run() {
-                System.out.println("Mic is online now.....");
-                stopCapture = false;
-                try {
-                    int readCount;
-                    while (!stopCapture) {
-                        readCount = targetDataLine.read(tempBuffer, 0, tempBuffer.length);  //capture sound into tempBuffer
-                        if (readCount > 0) {
-                            if(isMulticast)
-                                m_client.sendDataPacket(tempBuffer);
-                            else
-                                u_client.UDPSendPacket(tempBuffer);
-                        }
+            System.out.println("Mic is online now.....");
+            stopCapture = false;
+            try {
+                int readCount;
+                while (!stopCapture) {
+                    readCount = targetDataLine.read(tempBuffer, 0, tempBuffer.length);  //capture sound into tempBuffer
+                    if (readCount > 0) {
+                        if(isMulticast)
+                            m_client.sendDataPacket(tempBuffer);
+                        else
+                            u_client.UDPSendPacket(tempBuffer);
                     }
-                    byteArrayOutputStream.close();
-                } catch (IOException e) {
-                    System.out.println(e);
-                    System.exit(0);
                 }
+                byteArrayOutputStream.close();
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(0);
             }
+
         });
 
         recordingThread.start();
