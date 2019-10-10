@@ -73,17 +73,20 @@ public class MulticastServer extends Thread{
                 if(user.lastIndex!=pIndex )
                     user.disArrangments++;
 
+                user.lastIndex = pIndex;
+
                 user.voice_buffer[packet.packetIndex]=packet.voice_buffer;
+
                 user.arrivedPackets++;
 
                 if( pIndex == 15 ){
                     System.out.println( "UserData : "+user.userIP+
                                         "\narrived : "+user.arrivedPackets+
                                         "\nloss : "+(ProgramData.MEM_SIZE-user.arrivedPackets)+
-                                        "\n");
+                                        "\ndisarrangement : "+user.disArrangments);
                     user.resetData();
                 }
-                
+
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(packet.voice_buffer);
                 
