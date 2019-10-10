@@ -10,9 +10,7 @@ public class MulticastClient {
     
     private MulticastSocket multicastSocket;
     private DatagramSocket socket;
-    private InetAddress multicastAddress;
-    private RecordPlayback audioService;
-    private byte[] buffer;
+    private InetAddress groupAddress;
     private int packetCount;
     
     public static boolean multicastOnline = true ;
@@ -24,7 +22,7 @@ public class MulticastClient {
             //create a datagram socket
             socket = new DatagramSocket();
             //initialize the multicast
-            multicastAddress = hostIP;
+            groupAddress = hostIP;
         }catch (IOException ex1){
             System.out.println("IO Exception has been generate");
         }
@@ -32,16 +30,20 @@ public class MulticastClient {
     
     public void sendDataPacket(byte[] data){ 
         
-        try {
+        try (
+                ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+                ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
+             ){
 
-            DataPacket packet = new DataPacket( (packetCount++% 8) ,data );
-            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-            ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
+            if(packetCount==128) packetCount = 0;
+
+            DataPacket packet = new DataPacket( (packetCount++) ,data );
+
             outputObject.writeObject(packet);
             outputObject.flush();
 
             byte[] objectData = byteOutput.toByteArray();
-            DatagramPacket dataPacket = new DatagramPacket(objectData,objectData.length,multicastAddress,ProgramData.MUL_PORT_NUMBER);
+            DatagramPacket dataPacket = new DatagramPacket(objectData,objectData.length,groupAddress,ProgramData.MUL_PORT_NUMBER);
             //multicastSocket.send(dataPacket);
             socket.send(dataPacket);
             

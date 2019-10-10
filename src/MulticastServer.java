@@ -52,7 +52,7 @@ public class MulticastServer extends Thread{
                 ObjectInputStream inputObject = new ObjectInputStream(inputStream);
                 DataPacket packet = (DataPacket)inputObject.readObject();
 
-                System.out.println("Packet index "+packet.packetNo);
+                System.out.println("Packet number : "+packet.packetNo);
                 
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(packet.voice_buffer);

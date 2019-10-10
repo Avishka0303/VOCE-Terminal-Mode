@@ -8,12 +8,10 @@ public class UDPServer extends Thread{
     
     private DatagramSocket datagramSocket;
     private DatagramPacket datagramPacket;
-    
     private RecordPlayback audioService;
     
     private byte[] buffer;
     public static boolean isOnline = true;
-    
     private byte reArrangeBuffer[][]; 
     
     public UDPServer(RecordPlayback playback){
