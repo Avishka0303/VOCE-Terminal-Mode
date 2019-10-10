@@ -9,6 +9,7 @@ import java.net.MulticastSocket;
 public class MulticastClient {
     
     private MulticastSocket multicastSocket;
+    private DatagramSocket socket;
     private InetAddress multicastAddress;
     private RecordPlayback audioService;
     private byte[] buffer;
@@ -20,6 +21,8 @@ public class MulticastClient {
         try {           
             //initiaize the multicast Socket.
             multicastSocket = new MulticastSocket();
+            //create a datagram socket
+            socket = new DatagramSocket();
             //initialize the multicast
             multicastAddress = hostIP;
         }catch (IOException ex1){
@@ -39,12 +42,12 @@ public class MulticastClient {
 
             byte[] objectData = byteOutput.toByteArray();
             DatagramPacket dataPacket = new DatagramPacket(objectData,objectData.length,multicastAddress,ProgramData.MUL_PORT_NUMBER);
-            multicastSocket.send(dataPacket);
+            //multicastSocket.send(dataPacket);
+            socket.send(dataPacket);
             
         } catch (IOException ex) {
-            
             System.out.println("Error in multicast packet sending.");
-            
         }
+
     }
 }
