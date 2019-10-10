@@ -16,6 +16,7 @@ public class MulticastServer extends Thread{
     
     private byte[] buffer;
     private byte[][] userBuffer;
+    public boolean isOnline = true;
     
     public MulticastServer(RecordPlayback playback, InetAddress groupIP){
         
@@ -42,7 +43,7 @@ public class MulticastServer extends Thread{
 
         System.out.println("Multicast server is online. ");
 
-        while(true){
+        while(isOnline){
             
             try{
                 
@@ -97,6 +98,8 @@ public class MulticastServer extends Thread{
                 System.out.println("Error in read object");
             }
         }
+
+        multicastSocket.close();
         
     }
     
