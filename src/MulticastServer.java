@@ -35,7 +35,6 @@ public class MulticastServer extends Thread{
         }catch (IOException ex1){
             System.out.println("IO Exception has been generate");
         }
-        
     }
 
     @Override
