@@ -83,7 +83,7 @@ public class MulticastServer extends Thread{
                     System.out.println( "UserData : "+user.userIP+
                                         "\narrived : "+user.arrivedPackets+
                                         "\nloss : "+(ProgramData.MEM_SIZE-user.arrivedPackets)+
-                                        "\ndisarrangement : "+user.disArrangments);
+                                        "\ndisarrangement : "+user.disArrangments+"\n");
                     user.resetData();
                 }
 
