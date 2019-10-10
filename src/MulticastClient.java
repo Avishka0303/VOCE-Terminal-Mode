@@ -7,8 +7,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 public class MulticastClient {
-    
-    private MulticastSocket multicastSocket;
+
     private DatagramSocket socket;
     private InetAddress groupAddress;
     private int packetCount;
@@ -16,9 +15,7 @@ public class MulticastClient {
     public static boolean multicastOnline = true ;
     
     public MulticastClient(InetAddress hostIP){
-        try {           
-            //initiaize the multicast Socket.
-            multicastSocket = new MulticastSocket();
+        try {
             //create a datagram socket
             socket = new DatagramSocket();
             //initialize the multicast
@@ -44,7 +41,6 @@ public class MulticastClient {
 
             byte[] objectData = byteOutput.toByteArray();
             DatagramPacket dataPacket = new DatagramPacket(objectData,objectData.length,groupAddress,ProgramData.MUL_PORT_NUMBER);
-            //multicastSocket.send(dataPacket);
             socket.send(dataPacket);
             
         } catch (IOException ex) {

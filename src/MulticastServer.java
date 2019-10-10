@@ -78,13 +78,11 @@ public class MulticastServer extends Thread{
 
                 if( pIndex == 15 ){
                     System.out.println( "UserData : "+user.userIP+
-                                        "/narrived : "+user.arrivedPackets+
-                                        "/nloss : "+(ProgramData.MEM_SIZE-user.arrivedPackets)+
-                                        "/n");
+                                        "\narrived : "+user.arrivedPackets+
+                                        "\nloss : "+(ProgramData.MEM_SIZE-user.arrivedPackets)+
+                                        "\n");
                     user.resetData();
                 }
-
-                System.out.println("Packet number : "+packet.packetIndex);
                 
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(packet.voice_buffer);
