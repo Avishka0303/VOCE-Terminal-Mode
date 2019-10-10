@@ -64,8 +64,8 @@ public class UDPServer extends Thread{
                 ObjectInputStream objectStream = new ObjectInputStream(inputStream);
                 DataPacket packet = (DataPacket)objectStream.readObject();
                 
-                System.out.println( "Packet has to arrived : " +( packetNo+1)+" arrived packet : "+packet.packetNo);
-                packetNo = packet.packetNo;
+                System.out.println( "Packet has to arrived : " +( packetNo+1)+" arrived packet : "+packet.packetIndex);
+                packetNo = packet.packetIndex;
                 
 //                if(reArrangeBuffer[packetNo%ProgramData.MEM_SIZE]==null)
 //                    reArrangeBuffer[packetNo%ProgramData.MEM_SIZE] = packet.voice_buffer;    

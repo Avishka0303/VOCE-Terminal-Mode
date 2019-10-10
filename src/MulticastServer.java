@@ -1,18 +1,21 @@
-import javax.xml.transform.sax.SAXSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.HashMap;
 
 public class MulticastServer extends Thread{
     
     private DatagramPacket datagramPacket;
     private MulticastSocket multicastSocket;
     private RecordPlayback audioService;
+
+    HashMap<Integer,User> usersMap = new HashMap<Integer, User>();
     
     private byte[] buffer;
+    private byte[][] userBuffer;
     
     public MulticastServer(RecordPlayback playback, InetAddress groupIP){
         
@@ -45,14 +48,43 @@ public class MulticastServer extends Thread{
                 
                 //--------------------- Recieve the data packet-------------------------------
                 multicastSocket.receive(datagramPacket);
-                System.out.println(datagramPacket.getAddress());
 
-                //--------------------- Deseriaize the object --------------------------------
+                //--------------------- Deserialize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInputStream inputObject = new ObjectInputStream(inputStream);
                 DataPacket packet = (DataPacket)inputObject.readObject();
 
-                System.out.println("Packet number : "+packet.packetNo);
+                //generate the hashcode for the user
+                InetAddress senderIp = datagramPacket.getAddress();
+                int userHash = senderIp.hashCode();
+
+                //---------------------- Packer rearranging and user controlling ----------------
+
+                User user = null;
+                if(usersMap.containsKey(userHash)){
+                    user = usersMap.get(userHash);
+                }else{
+                    user = new User(senderIp.toString());
+                    usersMap.put(userHash,user);
+                }
+
+                int pIndex = packet.packetIndex;
+
+                if(user.lastIndex!=pIndex )
+                    user.disArrangments++;
+
+                user.voice_buffer[packet.packetIndex]=packet.voice_buffer;
+                user.arrivedPackets++;
+
+                if( pIndex == 15 ){
+                    System.out.println( "UserData : "+user.userIP+
+                                        "/narrived : "+user.arrivedPackets+
+                                        "/nloss : "+(ProgramData.MEM_SIZE-user.arrivedPackets)+
+                                        "/n");
+                    user.resetData();
+                }
+
+                System.out.println("Packet number : "+packet.packetIndex);
                 
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(packet.voice_buffer);
@@ -63,7 +95,6 @@ public class MulticastServer extends Thread{
             }catch(ClassNotFoundException ex1){
                 System.out.println("Error in read object");
             }
-            
         }
         
     }

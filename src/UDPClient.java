@@ -5,7 +5,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class UDPClient {
     
@@ -28,9 +27,9 @@ public class UDPClient {
         
         try{
             
-            if(packetCount==128) packetCount=0;
+            if(packetCount==129) packetCount=0;
             
-            DataPacket packet = new DataPacket((packetCount++),data);
+            DataPacket packet = new DataPacket((packetCount++)%ProgramData.MEM_SIZE ,data);
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
             outputObject.writeObject(packet);

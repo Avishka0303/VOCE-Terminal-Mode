@@ -32,12 +32,12 @@ public class MulticastClient {
         
         try (
                 ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-                ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
-             ){
+                ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);   )
+        {
 
-            if(packetCount==128) packetCount = 0;
+            if(packetCount==129) packetCount = 0;
 
-            DataPacket packet = new DataPacket( (packetCount++) ,data );
+            DataPacket packet = new DataPacket( (packetCount++)%ProgramData.MEM_SIZE ,data );
 
             outputObject.writeObject(packet);
             outputObject.flush();
