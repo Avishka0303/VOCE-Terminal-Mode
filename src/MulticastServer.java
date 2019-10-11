@@ -71,7 +71,7 @@ public class MulticastServer extends Thread{
                 int pIndex = packet.packetIndex;
 
                 if( user.lastIndex!=pIndex )
-                    user.disArrangments++;
+                    user.disArrangements++;
 
                 user.lastIndex = pIndex;
 
@@ -82,7 +82,7 @@ public class MulticastServer extends Thread{
                 if( pIndex == 15 || (user.arrivedPackets-ProgramData.MEM_SIZE)>3 ){
                     System.out.println( "UserData : "+user.userIP+
                                         "\narrived : "+user.arrivedPackets+
-                                        "\ndisordered : "+user.disArrangments+"\n");
+                                        "\ndisordered : "+user.disArrangements +"\n");
                     user.resetData();
                 }
 

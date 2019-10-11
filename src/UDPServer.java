@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 /*
 * This class is for receiving the data
 *
+*
 * */
 
 public class UDPServer extends Thread{
@@ -68,7 +69,7 @@ public class UDPServer extends Thread{
                 int pIndex = packet.packetIndex;
 
                 if( user.lastIndex!=pIndex )
-                    user.disArrangments++;
+                    user.disArrangements++;
 
                 user.lastIndex = pIndex;
                 user.arrivedPackets++;
@@ -81,7 +82,7 @@ public class UDPServer extends Thread{
                     startTime = System.currentTimeMillis();
                     System.out.println( "UserData : "+user.userIP+
                                         "\narrived : "+user.arrivedPackets+
-                                        "\ndisordered : "+user.disArrangments+"\n");
+                                        "\ndisordered : "+user.disArrangements +"\n");
                     user.resetData();
                 }
                 
@@ -92,7 +93,6 @@ public class UDPServer extends Thread{
                 System.out.println("Error in deserialization.");
                 e1.printStackTrace();
             }
-            
         }
         datagramSocket.close();
     }
