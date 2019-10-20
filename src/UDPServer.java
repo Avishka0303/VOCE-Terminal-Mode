@@ -17,7 +17,6 @@ public class UDPServer extends Thread{
 
     private int lastIndex=-1;
     private int arrivedPacketsCount;
-    private int disArrangements;
     private int totalDisArrangements;
     
     private byte[] buffer;
@@ -52,7 +51,8 @@ public class UDPServer extends Thread{
         
         long startTime = System.currentTimeMillis();
         long endTime = 0 ;
-        
+        int min=0;
+
         while(isOnline){
 
             try{
@@ -69,13 +69,13 @@ public class UDPServer extends Thread{
 
                 //----------------------------packet reordering check ------------------------
                 if( lastIndex+1 != pIndex ){
-                    disArrangements++;
                     totalDisArrangements++;
                 }
 
                 lastIndex = pIndex;
-                if (lastIndex==16)
+                if (lastIndex==15)
                     lastIndex = -1;
+
                 arrivedPacketsCount++;
 
                 //--------------------- Send to audio output  ---------------------------------
@@ -83,10 +83,11 @@ public class UDPServer extends Thread{
 
                 //--------------------- print statistics about 1 minute -----------------------
                 endTime = System.currentTimeMillis();
+
                 if( (endTime-startTime) >= 60000 ){
                     startTime = System.currentTimeMillis();
                     System.out.println( "UserData : "+datagramPacket.getAddress().toString()+
-                                        "\narrived : "+arrivedPacketsCount+
+                                        "\nminute "+(++min)+" statistics\narrived : "+arrivedPacketsCount+
                                         "\ndisordered : "+ totalDisArrangements +"\n");
                     resetData();
                 }
@@ -105,7 +106,6 @@ public class UDPServer extends Thread{
     private void resetData() {
         arrivedPacketsCount=0;
         totalDisArrangements=0;
-        disArrangements=0;
     }
 }
 

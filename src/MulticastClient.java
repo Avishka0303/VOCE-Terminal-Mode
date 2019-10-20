@@ -5,6 +5,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+
+/*Sending data multicast address*/
 public class MulticastClient {
 
     private DatagramSocket socket;
@@ -34,6 +36,7 @@ public class MulticastClient {
 
             DataPacket packet = new DataPacket( (packetCount++)%ProgramData.MEM_SIZE ,data );
 
+            //serialize the data packet.
             outputObject.writeObject(packet);
             outputObject.flush();
 

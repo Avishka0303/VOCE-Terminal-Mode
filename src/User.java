@@ -17,7 +17,6 @@ public class User {
         for(int i=0;i<ProgramData.MEM_SIZE;i++) {
             voice_buffer[i] = null;
         }
-        lastIndex = -1;
         disArrangements = 0;
         arrivedPackets = 0;
     }

@@ -87,6 +87,9 @@ public class MulticastServer extends Thread{
                     user.disArrangements++;
 
                 user.lastIndex = pIndex;
+                if (user.lastIndex==15)
+                    user.lastIndex = -1;
+
                 user.arrivedPackets++;
 
                 //---------------------  Print the packet statistics after 1 minute ------------
@@ -106,7 +109,7 @@ public class MulticastServer extends Thread{
                 audioService.playVoice(packet.voice_buffer);
 
             }catch(IOException ex){
-                System.out.println("Error in multicast recieve.");
+                System.out.println("Error in multicast receive.");
                 ex.printStackTrace();
             }catch(ClassNotFoundException ex1){
                 System.out.println("Error in read object");
@@ -114,7 +117,5 @@ public class MulticastServer extends Thread{
         }
 
         multicastSocket.close();
-        
     }
-    
 }
