@@ -28,6 +28,8 @@ public class UDPClient {
         try{
             
             if(packetCount==129) packetCount=0;
+
+            //-------------------------------Serialize the data packet--------------------------------------
             
             DataPacket packet = new DataPacket((packetCount++)%ProgramData.MEM_SIZE ,data);
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();

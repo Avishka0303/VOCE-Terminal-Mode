@@ -51,7 +51,6 @@ public class VoiceConference {
         multiServer.start();
 
         Thread.sleep(1000);
-
         recordPlayback.captureVoice();
 
     }

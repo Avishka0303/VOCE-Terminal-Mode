@@ -2,7 +2,7 @@ public class User {
 
     byte voice_buffer[][] = new byte[ProgramData.MEM_SIZE][ProgramData.PACKET_SIZE];
     String userIP;
-    int lastIndex;
+    int lastIndex = -1;
     int disArrangements;
     int arrivedPackets;
 
@@ -17,7 +17,7 @@ public class User {
         for(int i=0;i<ProgramData.MEM_SIZE;i++) {
             voice_buffer[i] = null;
         }
-        lastIndex = 0;
+        lastIndex = -1;
         disArrangements = 0;
         arrivedPackets = 0;
     }

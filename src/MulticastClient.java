@@ -4,15 +4,13 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 
 public class MulticastClient {
 
     private DatagramSocket socket;
     private InetAddress groupAddress;
     private int packetCount;
-    
-    public static boolean multicastOnline = true ;
+
     
     public MulticastClient(InetAddress hostIP){
         try {
@@ -29,7 +27,7 @@ public class MulticastClient {
         
         try (
                 ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-                ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);   )
+                ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput)   )
         {
 
             if(packetCount==129) packetCount = 0;

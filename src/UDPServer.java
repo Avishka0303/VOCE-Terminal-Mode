@@ -4,18 +4,21 @@ import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-/*
-* This class is for receiving the data
-*
-*
-* */
+/*  This class is for receiving the data
+*   From another client
+*   And send them to the Sound output.
+**/
 
 public class UDPServer extends Thread{
     
     private DatagramSocket datagramSocket;
     private DatagramPacket datagramPacket;
     private RecordPlayback audioService;
-    private User user;
+
+    private int lastIndex=-1;
+    private int arrivedPacketsCount;
+    private int disArrangements;
+    private int totalDisArrangements;
     
     private byte[] buffer;
     public static boolean isOnline = true;
@@ -26,16 +29,13 @@ public class UDPServer extends Thread{
             
             this.audioService = playback;
 
-            //initialize the user
-            user = new User();
-            
             //buffer for read entire data packet
             buffer = new byte[ProgramData.PACKET_SIZE * 4];
 
-            //construct the socket.
+            //instantiate the socket.
             datagramSocket = new DatagramSocket(ProgramData.PORT_NUMBER);
            
-            //create the datagram packet
+            //instantiate the datagram packet
             datagramPacket = new DatagramPacket( buffer , ProgramData.PACKET_SIZE * 4 );
             
         } catch (IOException ex1) {
@@ -57,33 +57,38 @@ public class UDPServer extends Thread{
 
             try{
 
-                //-------------------- Recieve byte array from datagram socket --------------
+                //-------------------- Receive byte array from datagram socket --------------
                 datagramSocket.receive(datagramPacket);
                 
-                //--------------------- Deseriaize the object --------------------------------
+                //--------------------- Deserialize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInputStream objectStream = new ObjectInputStream(inputStream);
                 DataPacket packet = (DataPacket)objectStream.readObject();
 
-
                 int pIndex = packet.packetIndex;
 
-                if( user.lastIndex!=pIndex )
-                    user.disArrangements++;
+                //----------------------------packet reordering check ------------------------
+                if( lastIndex+1 != pIndex ){
+                    disArrangements++;
+                    totalDisArrangements++;
+                }
 
-                user.lastIndex = pIndex;
-                user.arrivedPackets++;
+                lastIndex = pIndex;
+                if (lastIndex==16)
+                    lastIndex = -1;
+                arrivedPacketsCount++;
 
-                //--------------------- Send to audio output  --------------------------------
+                //--------------------- Send to audio output  ---------------------------------
                 audioService.playVoice(packet.voice_buffer);
 
+                //--------------------- print statistics about 1 minute -----------------------
                 endTime = System.currentTimeMillis();
                 if( (endTime-startTime) >= 60000 ){
                     startTime = System.currentTimeMillis();
-                    System.out.println( "UserData : "+user.userIP+
-                                        "\narrived : "+user.arrivedPackets+
-                                        "\ndisordered : "+user.disArrangements +"\n");
-                    user.resetData();
+                    System.out.println( "UserData : "+datagramPacket.getAddress().toString()+
+                                        "\narrived : "+arrivedPacketsCount+
+                                        "\ndisordered : "+ totalDisArrangements +"\n");
+                    resetData();
                 }
                 
             }catch(IOException e){
@@ -95,6 +100,11 @@ public class UDPServer extends Thread{
             }
         }
         datagramSocket.close();
+    }
+
+    private void resetData() {
+        arrivedPacketsCount=0;
+        disArrangements=0;
     }
 }
 
