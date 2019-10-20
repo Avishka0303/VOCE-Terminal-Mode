@@ -15,6 +15,7 @@ public class MulticastServer extends Thread{
     private DatagramPacket datagramPacket;
     private MulticastSocket multicastSocket;
     private RecordPlayback audioService;
+    private InetAddress localHost;
 
     //Manage users connected
     HashMap<Integer,User> usersMap = new HashMap<Integer, User>();
@@ -35,6 +36,8 @@ public class MulticastServer extends Thread{
             datagramPacket = new DatagramPacket(buffer, ProgramData.PACKET_SIZE *4 );
             //join with group.
             multicastSocket.joinGroup(groupIP);
+            //to get the personal ip
+            localHost = InetAddress.getLocalHost();
             
         }catch (IOException ex1){
             System.out.println("IO Exception has been generate");
@@ -63,6 +66,8 @@ public class MulticastServer extends Thread{
 
                 //--------------------- generate the hashcode for the user ----------------------
                 InetAddress senderIp = datagramPacket.getAddress();
+                if(senderIp.equals(localHost))
+                    continue;
                 int userHash = senderIp.hashCode();
 
                 //---------------------- Packet rearranging and user controlling ----------------

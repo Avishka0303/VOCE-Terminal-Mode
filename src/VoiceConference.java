@@ -14,12 +14,17 @@ public class VoiceConference {
     public static void main(String args[]){
 
         if(args.length!=1 || !isValidIP(args[0])){
-            System.out.println("Enter a valid client IP address");
+            System.out.println("Enter a valid host IP address");
             System.exit(1);
         }
 
         try {
             hostIP = InetAddress.getByName(args[0]);
+
+            //Extract the ip belongs to this machine.
+            InetAddress localhost = InetAddress.getLocalHost();
+            System.out.println("System IP Address : " + (localhost.getHostAddress()).trim());
+            
             if(hostIP.isMulticastAddress()) {
                 startMulticastServer(hostIP);
                 isMulticast=true;

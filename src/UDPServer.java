@@ -104,6 +104,7 @@ public class UDPServer extends Thread{
 
     private void resetData() {
         arrivedPacketsCount=0;
+        totalDisArrangements=0;
         disArrangements=0;
     }
 }
