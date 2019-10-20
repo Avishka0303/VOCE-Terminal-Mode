@@ -51,7 +51,7 @@ public class MulticastServer extends Thread{
 
         long startTime = System.currentTimeMillis();
         long endTime = 0 ;
-
+        int min = 0 ;
         while(isOnline){
 
             try{
@@ -99,7 +99,7 @@ public class MulticastServer extends Thread{
                     for (Map.Entry<Integer,User> entry : usersMap.entrySet()){
                         User userd = (User)entry.getValue();
                         System.out.println( "UserData : "+user.userIP+
-                                            "\narrived : "+user.arrivedPackets+
+                                            "\nminute "+(++min)+" statistics\narrived : "+user.arrivedPackets+
                                             "\ndisordered : "+user.disArrangements +"\n");
                         user.resetData();
                     }

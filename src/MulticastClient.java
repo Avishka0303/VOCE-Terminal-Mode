@@ -5,14 +5,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-
 /*Sending data multicast address*/
 public class MulticastClient {
 
     private DatagramSocket socket;
     private InetAddress groupAddress;
     private int packetCount;
-
     
     public MulticastClient(InetAddress hostIP){
         try {
